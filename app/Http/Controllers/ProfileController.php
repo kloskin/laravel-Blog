@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Image;
 
 class ProfileController extends Controller
 {
@@ -57,4 +58,23 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function image(Request $request)
+    {
+        $request->validate([
+            'image' => 'required | image | mimes:jpg,png,jpeg,gif,svg | max:2048',
+        ]);
+
+        if($request->user()->image?->path){
+            unlink(storage_path('app/public'.$request->user()->image->path));
+        }
+
+        $image_path = $request->file('image')->store('images','public');
+        $image = new Image(['path'=>$image_path]);
+        $request->user()->image()->delete();
+        $request->user()->image()->save($image);
+
+        return Redirect::route('profile.edit')->with('status','image-updated');
+    }
+
 }
