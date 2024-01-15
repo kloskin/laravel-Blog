@@ -11,4 +11,4 @@
 5. **Personal Dashboard:** Track your activities and interactions in one convenient panel. See who's following you, who you're following, and which posts you've liked.
 
 
-##Screenshots
+## Screenshots
